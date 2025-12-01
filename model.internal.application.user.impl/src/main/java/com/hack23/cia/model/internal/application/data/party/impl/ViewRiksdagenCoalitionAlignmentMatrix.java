@@ -1,11 +1,28 @@
+/*
+ * Copyright 2010-2025 James Pether Sörling
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *	$Id$
+ *  $HeadURL$
+ */
 package com.hack23.cia.model.internal.application.data.party.impl;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -13,29 +30,19 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.hack23.cia.model.common.api.ModelObject;
+
 /**
- * JPA entity for view_riksdagen_coalition_alignment_matrix database view.
- * 
- * Intelligence Purpose: Maps coalition alignment patterns between parties through
- * voting behavior analysis. Identifies coalition likelihood, bloc relationships,
- * and potential government formation scenarios through empirical voting data.
- * 
- * Created by: Liquibase v1.29 (Intelligence Operations)
- * Risk Rules Supported: Pa-03, Pa-08 (Coalition formation and stability assessment)
+ * Coalition alignment matrix view.
  */
-@Entity(name = "ViewRiksdagenCoalitionAlignmentMatrix")
+@Entity
 @Table(name = "view_riksdagen_coalition_alignment_matrix")
-public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
+public final class ViewRiksdagenCoalitionAlignmentMatrix implements ModelObject {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "party_1", nullable = false, length = 50)
-	private String party1;
-
-	@Id
-	@Column(name = "party_2", nullable = false, length = 50)
-	private String party2;
+	@EmbeddedId
+	private ViewRiksdagenCoalitionAlignmentMatrixEmbeddedId embeddedId;
 
 	@Column(name = "shared_votes")
 	private Long sharedVotes;
@@ -46,57 +53,44 @@ public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
 	@Column(name = "opposed_votes")
 	private Long opposedVotes;
 
-	@Column(name = "alignment_rate", precision = 5, scale = 2)
-	private BigDecimal alignmentRate;
+	@Column(name = "alignment_rate")
+	private Double alignmentRate;
 
-	@Column(name = "coalition_likelihood", length = 50)
+	@Column(name = "coalition_likelihood")
 	private String coalitionLikelihood;
 
-	@Column(name = "bloc_relationship", length = 100)
+	@Column(name = "bloc_relationship")
 	private String blocRelationship;
 
-	@Column(name = "intelligence_comment", length = 500)
+	@Column(name = "intelligence_comment")
 	private String intelligenceComment;
+
+	@Column(name = "first_year")
+	private Integer firstYear;
+
+	@Column(name = "last_year")
+	private Integer lastYear;
 
 	@Column(name = "years_observed")
 	private Integer yearsObserved;
 
-	@Column(name = "trend_stability", length = 50)
-	private String trendStability;
-
-	@Column(name = "coalition_strength_score", precision = 5, scale = 2)
-	private BigDecimal coalitionStrengthScore;
-
-	/**
-	 * Default constructor.
-	 */
 	public ViewRiksdagenCoalitionAlignmentMatrix() {
 		super();
 	}
 
-	// Getters and Setters
-
-	public String getParty1() {
-		return party1;
+	public ViewRiksdagenCoalitionAlignmentMatrixEmbeddedId getEmbeddedId() {
+		return embeddedId;
 	}
 
-	public void setParty1(String party1) {
-		this.party1 = party1;
-	}
-
-	public String getParty2() {
-		return party2;
-	}
-
-	public void setParty2(String party2) {
-		this.party2 = party2;
+	public void setEmbeddedId(final ViewRiksdagenCoalitionAlignmentMatrixEmbeddedId embeddedId) {
+		this.embeddedId = embeddedId;
 	}
 
 	public Long getSharedVotes() {
 		return sharedVotes;
 	}
 
-	public void setSharedVotes(Long sharedVotes) {
+	public void setSharedVotes(final Long sharedVotes) {
 		this.sharedVotes = sharedVotes;
 	}
 
@@ -104,7 +98,7 @@ public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
 		return alignedVotes;
 	}
 
-	public void setAlignedVotes(Long alignedVotes) {
+	public void setAlignedVotes(final Long alignedVotes) {
 		this.alignedVotes = alignedVotes;
 	}
 
@@ -112,15 +106,15 @@ public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
 		return opposedVotes;
 	}
 
-	public void setOpposedVotes(Long opposedVotes) {
+	public void setOpposedVotes(final Long opposedVotes) {
 		this.opposedVotes = opposedVotes;
 	}
 
-	public BigDecimal getAlignmentRate() {
+	public Double getAlignmentRate() {
 		return alignmentRate;
 	}
 
-	public void setAlignmentRate(BigDecimal alignmentRate) {
+	public void setAlignmentRate(final Double alignmentRate) {
 		this.alignmentRate = alignmentRate;
 	}
 
@@ -128,7 +122,7 @@ public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
 		return coalitionLikelihood;
 	}
 
-	public void setCoalitionLikelihood(String coalitionLikelihood) {
+	public void setCoalitionLikelihood(final String coalitionLikelihood) {
 		this.coalitionLikelihood = coalitionLikelihood;
 	}
 
@@ -136,7 +130,7 @@ public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
 		return blocRelationship;
 	}
 
-	public void setBlocRelationship(String blocRelationship) {
+	public void setBlocRelationship(final String blocRelationship) {
 		this.blocRelationship = blocRelationship;
 	}
 
@@ -144,65 +138,69 @@ public class ViewRiksdagenCoalitionAlignmentMatrix implements Serializable {
 		return intelligenceComment;
 	}
 
-	public void setIntelligenceComment(String intelligenceComment) {
+	public void setIntelligenceComment(final String intelligenceComment) {
 		this.intelligenceComment = intelligenceComment;
+	}
+
+	public Integer getFirstYear() {
+		return firstYear;
+	}
+
+	public void setFirstYear(final Integer firstYear) {
+		this.firstYear = firstYear;
+	}
+
+	public Integer getLastYear() {
+		return lastYear;
+	}
+
+	public void setLastYear(final Integer lastYear) {
+		this.lastYear = lastYear;
 	}
 
 	public Integer getYearsObserved() {
 		return yearsObserved;
 	}
 
-	public void setYearsObserved(Integer yearsObserved) {
+	public void setYearsObserved(final Integer yearsObserved) {
 		this.yearsObserved = yearsObserved;
-	}
-
-	public String getTrendStability() {
-		return trendStability;
-	}
-
-	public void setTrendStability(String trendStability) {
-		this.trendStability = trendStability;
-	}
-
-	public BigDecimal getCoalitionStrengthScore() {
-		return coalitionStrengthScore;
-	}
-
-	public void setCoalitionStrengthScore(BigDecimal coalitionStrengthScore) {
-		this.coalitionStrengthScore = coalitionStrengthScore;
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
-		final ViewRiksdagenCoalitionAlignmentMatrix other = (ViewRiksdagenCoalitionAlignmentMatrix) obj;
-		return new EqualsBuilder()
-				.append(party1, other.party1)
-				.append(party2, other.party2)
-				.isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder()
-				.append(party1)
-				.append(party2)
-				.toHashCode();
+		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-				.append("party1", party1)
-				.append("party2", party2)
-				.append("alignmentRate", alignmentRate)
-				.append("coalitionLikelihood", coalitionLikelihood)
-				.append("blocRelationship", blocRelationship)
-				.toString();
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+
+	@Override
+	public int hashCode() {
+		return HashCodeBuilder.reflectionHashCode(this);
+	}
+
+	/**
+	 * Compare to.
+	 *
+	 * @param o the o
+	 * @return the int
+	 */
+	public int compareTo(final ModelObject o) {
+		if (this == o) {
+			return 0;
+		}
+		if (embeddedId == null) {
+			return -1;
+		}
+		if (o == null || !(o instanceof ViewRiksdagenCoalitionAlignmentMatrix)) {
+			return -1;
+		}
+		final ViewRiksdagenCoalitionAlignmentMatrix other = (ViewRiksdagenCoalitionAlignmentMatrix) o;
+		if (other.embeddedId == null) {
+			return 1;
+		}
+		return embeddedId.compareTo(other.embeddedId);
 	}
 }
